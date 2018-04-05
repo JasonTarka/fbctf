@@ -466,6 +466,11 @@ class IndexController extends Controller {
               />
               {$ldap_domain_suffix}
             </div>
+            <div id="team_name_error" class="el--text completely-hidden">
+              <label for=""></label>
+              <h6 class="details" style="color:red;">{tr('Team name already in use')}</h6>
+            </div>
+
             <div class="form-el el--text">
               <label for="">{tr('Password')}</label>
               <input autocomplete="off" name="password" type="password" />
@@ -680,6 +685,11 @@ class IndexController extends Controller {
               />
               {$ldap_domain_suffix}
             </div>
+            <div id="team_name_error" class="el--text completely-hidden">
+              <label for=""></label>
+              <h6 class="details" style="color:red;">{tr('Team name already in use')}</h6>
+            </div>
+
             <div class="form-el el--text">
               <label for="">{tr('Password')}</label>
               <input autocomplete="off" name="password" type="password" />

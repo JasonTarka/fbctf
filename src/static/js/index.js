@@ -1,9 +1,18 @@
 var $ = require('jquery');
 
-function teamNameFormError() {
-  $('.el--text')[0].classList.add('form-error');
-  $('.fb-form input[name="team_name"]').on('change', function() {
-    $('.el--text')[0].classList.remove('form-error');
+function teamNameFormError(details) {
+  var $nameField = $('input[name="team_name"]');
+  var $inUseError = $('#team_name_error');
+  $inUseError.addClass('completely-hidden');
+
+  $nameField.parent().addClass('form-error');
+  if (details) {
+    $inUseError.children('.details').text(details);
+    $inUseError.removeClass('completely-hidden');
+  }
+
+  $nameField.on('change', function() {
+    $nameField.parent().removeClass('form-error');
   });
 }
 
@@ -32,9 +41,10 @@ function teamPasswordFormError(toosimple) {
 }
 
 function teamTokenFormError() {
-  $('.el--text')[2].classList.add('form-error');
-  $('.fb-form input[name="token"]').on('change', function() {
-    $('.el--text')[2].classList.remove('form-error');
+  var $tokenField = $('input[name="token"]');
+  $tokenField.parent('.el--text').addClass('form-error');
+  $tokenField.on('change', function() {
+    $tokenField.parent('.el--text').removeClass('form-error');
   });
 }
 
@@ -109,7 +119,13 @@ function verifyTeamLogo(): {isCustom: boolean, type: string, logo: number, error
 }
 
 function goToPage(page) {
-  window.location.href = '/index.php?p=' + page;
+  switch (page) {
+    case 'login':
+      window.location.href = '/index.php?page=' + page;
+      break;
+    default:
+      window.location.href = '/index.php?p=' + page;
+  }
 }
 
 function sendIndexRequest(request_data) {
@@ -133,7 +149,7 @@ function sendIndexRequest(request_data) {
         teamLoginFormError();
       }
       if (responseData.message === 'Registration failed') {
-        teamNameFormError();
+        teamNameFormError(responseData.details);
         teamTokenFormError();
       }
     }

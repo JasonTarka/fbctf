@@ -120,12 +120,16 @@ class Utils {
     string $result,
     string $msg,
     string $redirect,
+    string $details = ''
   ): string {
     $response_data = array(
       'result' => $result,
       'message' => $msg,
       'redirect' => $redirect,
     );
+    if ($details) {
+      $response_data['details'] = $details;
+    }
     return json_encode($response_data);
   }
 
@@ -141,8 +145,10 @@ class Utils {
   public static function error_response(
     string $msg,
     string $redirect,
+    string $details = ''
   ): string {
-    return self::request_response('ERROR', $msg, $redirect);
+    self::logMessage("Error: '$msg'; Redirect to: '$redirect'; details: '$details'");
+    return self::request_response('ERROR', $msg, $redirect, $details);
   }
 
   public static function logMessage(

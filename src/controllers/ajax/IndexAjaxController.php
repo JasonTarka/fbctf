@@ -126,7 +126,7 @@ class IndexAjaxController extends AjaxController {
 
     // Check if registration is enabled
     if ($registration->getValue() === '0') {
-      return Utils::error_response('Registration failed', 'registration');
+      return Utils::error_response('Registration failed', 'registration', tr('Error in submitted form'));
     }
 
     // Check if strongs passwords are enforced
@@ -178,7 +178,7 @@ class IndexAjaxController extends AjaxController {
       $token_check = await Token::genCheck((string) $token);
       // Check provided token
       if ($token === null || !$token_check) {
-        return Utils::error_response('Registration failed', 'registration');
+        return Utils::error_response('Registration failed', 'registration', tr('Invalid token'));
       }
     }
 
@@ -190,7 +190,7 @@ class IndexAjaxController extends AjaxController {
       if ($custom_logo) {
         $logo_name = $custom_logo->getName();
       } else {
-        return Utils::error_response('Registration failed', 'registration');
+        return Utils::error_response('Registration failed', 'registration', tr('Error with custom logo'));
       }
     }
 
@@ -201,7 +201,7 @@ class IndexAjaxController extends AjaxController {
 
     // Check if team name is not empty or just spaces
     if (trim($team_name) === '') {
-      return Utils::error_response('Registration failed', 'registration');
+      return Utils::error_response('Registration failed', 'registration', tr('Team name must not be empty'));
     }
 
     // Trim team name to 20 chars, to avoid breaking UI
@@ -233,10 +233,10 @@ class IndexAjaxController extends AjaxController {
           return await $this->genLoginTeam($team_id, $password);
         }
       } else {
-        return Utils::error_response('Registration failed', 'registration');
+        return Utils::error_response('Registration failed', 'registration', tr('Error registering'));
       }
     } else {
-      return Utils::error_response('Registration failed', 'registration');
+      return Utils::error_response('Registration failed', 'registration', tr('Team name already in use'));
     }
   }
 
@@ -252,7 +252,8 @@ class IndexAjaxController extends AjaxController {
     // Check if login is disabled and this isn't an admin
     if (($login->getValue() === '0') &&
         ($team === null || $team->getAdmin() === false)) {
-      return Utils::error_response('Login failed', 'login');
+      // Forward them to the login page, so it doesn't look like a mysterious failure
+      return Utils::ok_response('Login failed', 'login');
     }
 
     // Otherwise let's login any valid attempt
